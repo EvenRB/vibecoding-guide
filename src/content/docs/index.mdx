@@ -1,40 +1,40 @@
 ---
-title: Welcome to Starlight
-description: Get started building your docs site with Starlight.
-template: splash # Remove or comment out this line to display the site sidebar on this page.
+title: Vibecoding Guide
+description: Your guide to AI-assisted development — from first setup to advanced multi-agent workflows.
+template: splash
 hero:
-  tagline: Congrats on setting up a new Starlight project!
-  image:
-    file: ../../assets/houston.webp
+  tagline: Learn to work with AI tools effectively. Pick a guide and start building.
   actions:
-    - text: Example Guide
-      link: /guides/example/
+    - text: VS Code + Claude CLI
+      link: /guides/vscode-cli/
       icon: right-arrow
-    - text: Read the Starlight docs
-      link: https://starlight.astro.build
-      icon: external
+      variant: primary
+    - text: Claude Desktop
+      link: /guides/claude-desktop/
+      icon: right-arrow
+    - text: Explore the AI Landscape
+      link: /ai-landscape/
+      icon: open-book
       variant: minimal
 ---
 
-import { Card, CardGrid } from '@astrojs/starlight/components';
+import { CardGrid, Card } from '@astrojs/starlight/components'
 
-## Next steps
+## What is vibecoding?
 
-<CardGrid stagger>
-	<Card title="Update content" icon="pencil">
-		Edit `src/content/docs/index.mdx` to see this page change.
-	</Card>
-	<Card title="Change page layout" icon="document">
-		Delete `template: splash` in `src/content/docs/index.mdx` to display a
-		sidebar on this page.
-	</Card>
-	<Card title="Add new content" icon="add-document">
-		Add Markdown or MDX files to `src/content/docs` to create new pages.
-	</Card>
-	<Card title="Configure your site" icon="setting">
-		Edit your `sidebar` and other config in `astro.config.mjs`.
-	</Card>
-	<Card title="Read the docs" icon="open-book">
-		Learn more in [the Starlight Docs](https://starlight.astro.build/).
-	</Card>
+Vibecoding is AI-assisted development — working with Claude, Codex, and other AI tools as active collaborators in your workflow. This guide covers the tools, patterns, and cheatsheets that make it work.
+
+<CardGrid>
+  <Card title="Guides" icon="rocket">
+    Step-by-step walkthroughs for getting started with VS Code + Claude CLI, Claude Desktop, and more.
+  </Card>
+  <Card title="AI Landscape" icon="puzzle">
+    Which AI is right for your task? IDE comparison, open source options, and tool selection.
+  </Card>
+  <Card title="Cheatsheets" icon="document">
+    Compact visual reference cards — screenshot or paste into AI for instant workflow context.
+  </Card>
+  <Card title="Reference" icon="open-book">
+    Deep dives into CLAUDE.md, token control, Superpowers skills, Ralph Loop, and more.
+  </Card>
 </CardGrid>

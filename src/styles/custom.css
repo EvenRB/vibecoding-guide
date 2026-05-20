@@ -1,0 +1,23 @@
+/* Dark purple palette — matches the mockup design */
+:root[data-theme='dark'],
+:root {
+  --sl-color-accent:           #a78bfa;
+  --sl-color-accent-high:      #c4b5fd;
+  --sl-color-accent-low:       rgba(167, 139, 250, 0.15);
+  --sl-color-bg:               #0f0e17;
+  --sl-color-bg-nav:           #13111c;
+  --sl-color-bg-sidebar:       #13111c;
+  --sl-color-bg-inline-code:   rgba(167, 139, 250, 0.1);
+  --sl-color-hairline-light:   rgba(255, 255, 255, 0.07);
+  --sl-color-hairline-shade:   rgba(255, 255, 255, 0.04);
+  --sl-color-text:             #e4e4e7;
+  --sl-color-text-accent:      #c4b5fd;
+  --sl-color-white:            #e4e4e7;
+  --sl-color-gray-1:           #a1a1aa;
+  --sl-color-gray-2:           #71717a;
+  --sl-color-gray-3:           #52525b;
+  --sl-color-gray-4:           #3f3f46;
+  --sl-color-gray-5:           #27272a;
+  --sl-color-gray-6:           #18181b;
+  --sl-color-black:            #0f0e17;
+}
