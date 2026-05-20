@@ -1,0 +1,97 @@
+---
+interface Props {
+  title: string
+  description: string
+  href: string
+  tags: string[]
+  featured?: boolean
+}
+
+const { title, description, href, tags, featured = false } = Astro.props
+---
+
+<a href={href} class:list={['cheatsheet-card', { featured }]}>
+  <div class="card-header">
+    <h3 class="card-title">{title}</h3>
+    {featured && <span class="featured-badge">Featured</span>}
+  </div>
+  <p class="card-description">{description}</p>
+  <div class="tag-list" aria-label="Tags">
+    {tags.map(tag => <span class="tag">{tag}</span>)}
+  </div>
+</a>
+
+<style>
+  .cheatsheet-card {
+    display: block;
+    background: rgba(255, 255, 255, 0.03);
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    border-radius: 10px;
+    padding: 1.25rem;
+    text-decoration: none;
+    transition: border-color 0.15s, background 0.15s;
+  }
+
+  .cheatsheet-card:hover {
+    border-color: rgba(167, 139, 250, 0.4);
+    background: rgba(167, 139, 250, 0.06);
+  }
+
+  .cheatsheet-card.featured {
+    border-color: rgba(167, 139, 250, 0.3);
+    background: linear-gradient(135deg, rgba(167, 139, 250, 0.1), rgba(96, 165, 250, 0.04));
+  }
+
+  .card-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 0.5rem;
+    margin-bottom: 0.5rem;
+  }
+
+  .card-title {
+    font-size: 1rem;
+    font-weight: 700;
+    color: #c4b5fd;
+    margin: 0;
+  }
+
+  .featured-badge {
+    flex-shrink: 0;
+    font-size: 0.65rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    color: #4ade80;
+    background: rgba(74, 222, 128, 0.1);
+    border: 1px solid rgba(74, 222, 128, 0.25);
+    padding: 2px 8px;
+    border-radius: 100px;
+  }
+
+  .card-description {
+    font-size: 0.8rem;
+    color: #71717a;
+    line-height: 1.5;
+    margin: 0 0 0.75rem;
+  }
+
+  .tag-list {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.35rem;
+  }
+
+  .tag {
+    font-size: 0.65rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+    color: #a1a1aa;
+    background: rgba(255, 255, 255, 0.06);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    padding: 2px 8px;
+    border-radius: 100px;
+  }
+</style>
