@@ -8,10 +8,10 @@ export default defineConfig({
       title: 'Vibecoding Guide',
       customCss: ['./src/styles/custom.css'],
       editLink: {
-        baseUrl: 'https://github.com/Knyttneven/vibecoding-guide/edit/main/',
+        baseUrl: 'https://github.com/EvenRB/vibecoding-guide/edit/main/',
       },
       social: [
-        { icon: 'github', label: 'GitHub', href: 'https://github.com/Knyttneven/vibecoding-guide' },
+        { icon: 'github', label: 'GitHub', href: 'https://github.com/EvenRB/vibecoding-guide' },
       ],
       sidebar: [
         {
@@ -19,6 +19,7 @@ export default defineConfig({
           items: [
             { label: 'VS Code + Claude CLI', items: [{ autogenerate: { directory: 'guides/vscode-cli' } }] },
             { label: 'Claude Desktop', items: [{ autogenerate: { directory: 'guides/claude-desktop' } }] },
+            { label: 'Second Brain', items: [{ autogenerate: { directory: 'guides/second-brain' } }] },
           ],
         },
         { label: 'AI Landscape', items: [{ autogenerate: { directory: 'ai-landscape' } }] },
