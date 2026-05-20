@@ -1,0 +1,345 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Framework Comparison: Astro Starlight vs Docusaurus</title>
+<style>
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+:root {
+  --bg: #0d1117; --surface: #161b22; --surface2: #21262d;
+  --border: #30363d; --text: #e6edf3; --muted: #8b949e;
+  --purple: #a78bfa; --blue: #60a5fa; --green: #4ade80;
+  --yellow: #fbbf24; --mono: 'Cascadia Code','Fira Code',monospace;
+  --sans: 'Inter','Segoe UI',system-ui,sans-serif;
+}
+body { font-family: var(--sans); background: var(--bg); color: var(--text); font-size: 14px; }
+
+/* Page header */
+.page-header { padding: 3rem 2rem 1.5rem; max-width: 1300px; margin: 0 auto; }
+.page-header h1 { font-size: 1.8rem; font-weight: 800; margin-bottom: 0.4rem;
+  background: linear-gradient(135deg,#e6edf3,#a78bfa); -webkit-background-clip:text;
+  -webkit-text-fill-color:transparent; background-clip:text; }
+.page-header p { color: var(--muted); font-size: 14px; }
+
+/* Split layout */
+.split { display: grid; grid-template-columns: 1fr 1fr; gap: 2rem; max-width: 1300px; margin: 0 auto; padding: 0 2rem 3rem; }
+
+.side-label {
+  font-size: 11px; font-weight: 700; letter-spacing: 0.08em; text-transform: uppercase;
+  margin-bottom: 0.75rem; display: flex; align-items: center; gap: 0.5rem;
+}
+.rec-badge {
+  background: rgba(74,222,128,0.15); color: var(--green); border: 1px solid rgba(74,222,128,0.3);
+  font-size: 10px; padding: 2px 8px; border-radius: 100px; letter-spacing: 0.06em;
+}
+
+/* ── ASTRO STARLIGHT MOCKUP ── */
+.starlight {
+  border: 1px solid rgba(167,139,250,0.4); border-radius: 12px; overflow: hidden;
+  box-shadow: 0 0 40px rgba(167,139,250,0.08);
+}
+.sl-bar {
+  background: #13111c; border-bottom: 1px solid rgba(255,255,255,0.08);
+  padding: 0 1rem; height: 44px; display: flex; align-items: center; gap: 1rem;
+}
+.sl-logo { font-size: 13px; font-weight: 700; color: #c4b5fd; letter-spacing: -0.02em; }
+.sl-nav { display: flex; gap: 0; margin-left: auto; }
+.sl-nav a { color: #a1a1aa; font-size: 12px; padding: 0 0.7rem; height: 44px;
+  display: flex; align-items: center; text-decoration: none; }
+.sl-nav a:hover { color: #e4e4e7; }
+.sl-search { background: rgba(255,255,255,0.06); border: 1px solid rgba(255,255,255,0.1);
+  border-radius: 6px; padding: 4px 10px; font-size: 11px; color: #71717a; display: flex;
+  align-items: center; gap: 6px; cursor: pointer; }
+
+.sl-body { display: grid; grid-template-columns: 200px 1fr 140px; min-height: 420px; }
+
+.sl-sidebar { background: #13111c; border-right: 1px solid rgba(255,255,255,0.06);
+  padding: 1rem 0; }
+.sl-group-label { font-size: 10px; font-weight: 700; letter-spacing: 0.08em;
+  text-transform: uppercase; color: #52525b; padding: 0.75rem 1rem 0.3rem; }
+.sl-link { display: block; font-size: 12px; padding: 5px 1rem; color: #a1a1aa;
+  text-decoration: none; border-radius: 0; cursor: pointer; }
+.sl-link:hover { color: #e4e4e7; background: rgba(255,255,255,0.04); }
+.sl-link.active { color: #c4b5fd; background: rgba(167,139,250,0.1);
+  border-left: 2px solid #c4b5fd; padding-left: calc(1rem - 2px); }
+
+.sl-main { background: #0f0e17; padding: 2rem; overflow: hidden; }
+.sl-breadcrumb { font-size: 11px; color: #52525b; margin-bottom: 1.25rem; }
+.sl-breadcrumb span { color: #c4b5fd; }
+.sl-h1 { font-size: 1.5rem; font-weight: 800; color: #e4e4e7; margin-bottom: 0.5rem; line-height: 1.2; }
+.sl-subtitle { font-size: 13px; color: #71717a; margin-bottom: 1.25rem; line-height: 1.5; }
+.sl-hero-card {
+  background: linear-gradient(135deg, rgba(167,139,250,0.12), rgba(96,165,250,0.06));
+  border: 1px solid rgba(167,139,250,0.2); border-radius: 10px;
+  padding: 1rem 1.25rem; margin-bottom: 1rem;
+}
+.sl-hero-card p { font-size: 12px; color: #a1a1aa; line-height: 1.6; }
+.sl-section-title { font-size: 13px; font-weight: 700; color: #e4e4e7; margin: 1rem 0 0.5rem; }
+.sl-card-row { display: grid; grid-template-columns: 1fr 1fr; gap: 0.5rem; }
+.sl-card { background: rgba(255,255,255,0.03); border: 1px solid rgba(255,255,255,0.07);
+  border-radius: 8px; padding: 0.75rem; }
+.sl-card-title { font-size: 12px; font-weight: 600; color: #c4b5fd; margin-bottom: 3px; }
+.sl-card-text { font-size: 11px; color: #71717a; line-height: 1.4; }
+.sl-code { background: rgba(255,255,255,0.04); border: 1px solid rgba(255,255,255,0.08);
+  border-radius: 6px; padding: 0.6rem 0.75rem; font-family: var(--mono);
+  font-size: 11px; color: #c4b5fd; margin-top: 0.75rem; }
+
+.sl-toc { background: #13111c; border-left: 1px solid rgba(255,255,255,0.06); padding: 1rem; }
+.sl-toc-title { font-size: 10px; font-weight: 700; letter-spacing: 0.08em;
+  text-transform: uppercase; color: #52525b; margin-bottom: 0.75rem; }
+.sl-toc-link { display: block; font-size: 11px; color: #71717a; text-decoration: none;
+  padding: 3px 0; line-height: 1.4; }
+.sl-toc-link.active { color: #c4b5fd; }
+
+/* ── DOCUSAURUS MOCKUP ── */
+.docu {
+  border: 1px solid rgba(96,165,250,0.3); border-radius: 12px; overflow: hidden;
+  box-shadow: 0 0 40px rgba(59,130,246,0.06);
+}
+.doc-bar {
+  background: #ffffff; border-bottom: 1px solid #e5e7eb;
+  padding: 0 1rem; height: 44px; display: flex; align-items: center; gap: 1rem;
+}
+.doc-logo { font-size: 13px; font-weight: 700; color: #2563eb; }
+.doc-nav { display: flex; gap: 0; margin-left: auto; }
+.doc-nav a { color: #374151; font-size: 12px; padding: 0 0.7rem; height: 44px;
+  display: flex; align-items: center; text-decoration: none; }
+.doc-search { background: #f9fafb; border: 1px solid #d1d5db;
+  border-radius: 6px; padding: 4px 10px; font-size: 11px; color: #9ca3af;
+  display: flex; align-items: center; gap: 6px; cursor: pointer; }
+.doc-search-icon { color: #9ca3af; }
+
+.doc-body { display: grid; grid-template-columns: 200px 1fr 140px; min-height: 420px; }
+
+.doc-sidebar { background: #f9fafb; border-right: 1px solid #e5e7eb; padding: 1rem 0; }
+.doc-group-label { font-size: 10px; font-weight: 700; letter-spacing: 0.06em;
+  text-transform: uppercase; color: #9ca3af; padding: 0.75rem 1rem 0.3rem; }
+.doc-link { display: block; font-size: 12px; padding: 5px 1rem; color: #6b7280;
+  text-decoration: none; cursor: pointer; }
+.doc-link:hover { color: #1f2937; background: #f3f4f6; }
+.doc-link.active { color: #2563eb; background: #eff6ff;
+  border-left: 2px solid #2563eb; padding-left: calc(1rem - 2px); font-weight: 600; }
+
+.doc-main { background: #ffffff; padding: 2rem; }
+.doc-breadcrumb { font-size: 11px; color: #9ca3af; margin-bottom: 1rem; }
+.doc-breadcrumb span { color: #2563eb; }
+.doc-h1 { font-size: 1.5rem; font-weight: 800; color: #111827; margin-bottom: 0.5rem; line-height: 1.2; }
+.doc-subtitle { font-size: 13px; color: #6b7280; margin-bottom: 1.25rem; line-height: 1.5; }
+.doc-admonition { background: #eff6ff; border: 1px solid #bfdbfe;
+  border-left: 4px solid #2563eb; border-radius: 0 8px 8px 0;
+  padding: 0.75rem 1rem; margin-bottom: 1rem; }
+.doc-admonition-title { font-size: 11px; font-weight: 700; text-transform: uppercase;
+  letter-spacing: 0.06em; color: #2563eb; margin-bottom: 4px; }
+.doc-admonition p { font-size: 12px; color: #374151; line-height: 1.6; }
+.doc-h2 { font-size: 14px; font-weight: 700; color: #111827; margin: 1rem 0 0.5rem; border-bottom: 1px solid #e5e7eb; padding-bottom: 4px; }
+.doc-p { font-size: 12px; color: #374151; line-height: 1.6; margin-bottom: 0.75rem; }
+.doc-code { background: #f3f4f6; border: 1px solid #e5e7eb; border-radius: 6px;
+  padding: 0.6rem 0.75rem; font-family: var(--mono); font-size: 11px; color: #1f2937; }
+.doc-pagination { display: flex; justify-content: space-between; margin-top: 1.25rem;
+  padding-top: 1rem; border-top: 1px solid #e5e7eb; }
+.doc-page-btn { font-size: 11px; color: #2563eb; display: flex; flex-direction: column; gap: 2px; }
+.doc-page-btn small { color: #9ca3af; font-size: 10px; }
+
+.doc-toc { background: #f9fafb; border-left: 1px solid #e5e7eb; padding: 1rem; }
+.doc-toc-title { font-size: 10px; font-weight: 700; letter-spacing: 0.06em;
+  text-transform: uppercase; color: #9ca3af; margin-bottom: 0.75rem; }
+.doc-toc-link { display: block; font-size: 11px; color: #9ca3af; text-decoration: none;
+  padding: 3px 0; line-height: 1.4; }
+.doc-toc-link.active { color: #2563eb; font-weight: 600; }
+
+/* Verdict */
+.verdict { max-width: 1300px; margin: 0 auto; padding: 0 2rem 4rem; }
+.verdict-card { background: var(--surface); border: 1px solid rgba(74,222,128,0.25);
+  border-radius: 12px; padding: 1.75rem; display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 1.5rem; }
+.verdict-col h3 { font-size: 13px; font-weight: 700; margin-bottom: 0.75rem; }
+.verdict-item { font-size: 12.5px; color: var(--muted); display: flex; gap: 8px;
+  margin-bottom: 5px; line-height: 1.4; }
+
+@media (max-width: 900px) {
+  .split { grid-template-columns: 1fr; }
+  .verdict-card { grid-template-columns: 1fr; }
+}
+</style>
+</head>
+<body>
+
+<div class="page-header">
+  <h1>Astro Starlight vs Docusaurus</h1>
+  <p>Framework mockup comparison for the Vibecoding Guide — pick your visual identity</p>
+</div>
+
+<div class="split">
+
+  <!-- ── ASTRO STARLIGHT ── -->
+  <div>
+    <div class="side-label" style="color:var(--purple)">
+      ✦ Astro Starlight
+      <span class="rec-badge">Recommended</span>
+    </div>
+    <div class="starlight">
+      <!-- Topbar -->
+      <div class="sl-bar">
+        <div class="sl-logo">⚡ Vibecoding Guide</div>
+        <div class="sl-nav">
+          <a>Guides</a><a>Reference</a><a>Blog</a>
+        </div>
+        <div class="sl-search">🔍 <span>Search...</span> <span style="opacity:.4;font-size:10px">⌘K</span></div>
+      </div>
+      <!-- Body -->
+      <div class="sl-body">
+        <!-- Sidebar -->
+        <div class="sl-sidebar">
+          <div class="sl-group-label">Getting Started</div>
+          <a class="sl-link">What is Claude?</a>
+          <a class="sl-link active">Claude Desktop</a>
+          <a class="sl-link">Claude Projects</a>
+          <a class="sl-link">CLI in VS Code</a>
+
+          <div class="sl-group-label">Intermediate</div>
+          <a class="sl-link">CLAUDE.md</a>
+          <a class="sl-link">Orchestrator Flow</a>
+          <a class="sl-link">Token Control</a>
+
+          <div class="sl-group-label">Advanced</div>
+          <a class="sl-link">Superpowers Skills</a>
+          <a class="sl-link">Ralph Loop</a>
+          <a class="sl-link">Multi-Agent</a>
+        </div>
+        <!-- Main -->
+        <div class="sl-main">
+          <div class="sl-breadcrumb">Getting Started / <span>Claude Desktop</span></div>
+          <div class="sl-h1">Setting Up Claude Desktop</div>
+          <div class="sl-subtitle">Get Claude running on your machine in under 5 minutes — no coding required.</div>
+          <div class="sl-hero-card">
+            <p>Claude Desktop is the fastest way to start working with Claude. It gives you a persistent conversation window, file access, and MCP server support right out of the box.</p>
+          </div>
+          <div class="sl-section-title">Prerequisites</div>
+          <div class="sl-card-row">
+            <div class="sl-card">
+              <div class="sl-card-title">macOS</div>
+              <div class="sl-card-text">macOS 12 Monterey or later</div>
+            </div>
+            <div class="sl-card">
+              <div class="sl-card-title">Windows</div>
+              <div class="sl-card-text">Windows 10 or 11 (64-bit)</div>
+            </div>
+          </div>
+          <div class="sl-code">$ download from claude.ai/download</div>
+        </div>
+        <!-- TOC -->
+        <div class="sl-toc">
+          <div class="sl-toc-title">On this page</div>
+          <a class="sl-toc-link active">Prerequisites</a>
+          <a class="sl-toc-link">Installation</a>
+          <a class="sl-toc-link">First launch</a>
+          <a class="sl-toc-link">File access</a>
+          <a class="sl-toc-link">MCP servers</a>
+          <a class="sl-toc-link">Next steps</a>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ── DOCUSAURUS ── -->
+  <div>
+    <div class="side-label" style="color:var(--blue)">◈ Docusaurus</div>
+    <div class="docu">
+      <!-- Topbar -->
+      <div class="doc-bar">
+        <div class="doc-logo">📘 Vibecoding Guide</div>
+        <div class="doc-nav">
+          <a>Docs</a><a>API</a><a>Blog</a><a>Community</a>
+        </div>
+        <div class="doc-search">🔍 <span>Search docs</span></div>
+      </div>
+      <!-- Body -->
+      <div class="doc-body">
+        <!-- Sidebar -->
+        <div class="doc-sidebar">
+          <div class="doc-group-label">Getting Started</div>
+          <a class="doc-link">What is Claude?</a>
+          <a class="doc-link active">Claude Desktop</a>
+          <a class="doc-link">Claude Projects</a>
+          <a class="doc-link">CLI in VS Code</a>
+
+          <div class="doc-group-label">Intermediate</div>
+          <a class="doc-link">CLAUDE.md</a>
+          <a class="doc-link">Orchestrator Flow</a>
+          <a class="doc-link">Token Control</a>
+
+          <div class="doc-group-label">Advanced</div>
+          <a class="doc-link">Superpowers Skills</a>
+          <a class="doc-link">Ralph Loop</a>
+          <a class="doc-link">Multi-Agent</a>
+        </div>
+        <!-- Main -->
+        <div class="doc-main">
+          <div class="doc-breadcrumb">Getting Started / <span>Claude Desktop</span></div>
+          <div class="doc-h1">Setting Up Claude Desktop</div>
+          <div class="doc-subtitle">Get Claude running on your machine in under 5 minutes — no coding required.</div>
+          <div class="doc-admonition">
+            <div class="doc-admonition-title">ℹ️ Info</div>
+            <p>Claude Desktop gives you a persistent conversation window, file access, and MCP server support right out of the box.</p>
+          </div>
+          <div class="doc-h2">Prerequisites</div>
+          <div class="doc-p">Make sure your system meets the minimum requirements before downloading.</div>
+          <div class="doc-code">$ download from claude.ai/download</div>
+          <div class="doc-pagination">
+            <div class="doc-page-btn">
+              <small>← Previous</small>
+              <span>What is Claude?</span>
+            </div>
+            <div class="doc-page-btn" style="text-align:right">
+              <small>Next →</small>
+              <span>Claude Projects</span>
+            </div>
+          </div>
+        </div>
+        <!-- TOC -->
+        <div class="doc-toc">
+          <div class="doc-toc-title">On this page</div>
+          <a class="doc-toc-link active">Prerequisites</a>
+          <a class="doc-toc-link">Installation</a>
+          <a class="doc-toc-link">First launch</a>
+          <a class="doc-toc-link">File access</a>
+          <a class="doc-toc-link">MCP servers</a>
+          <a class="doc-toc-link">Next steps</a>
+        </div>
+      </div>
+    </div>
+  </div>
+
+</div><!-- /split -->
+
+<!-- Verdict -->
+<div class="verdict">
+  <div class="verdict-card">
+    <div class="verdict-col">
+      <h3 style="color:var(--purple)">✦ Why Astro Starlight</h3>
+      <div class="verdict-item"><span style="color:var(--purple)">→</span> Dark-first design — matches the workflow guide aesthetic you already loved</div>
+      <div class="verdict-item"><span style="color:var(--purple)">→</span> Full CSS/component control — can match any visual style</div>
+      <div class="verdict-item"><span style="color:var(--purple)">→</span> Better landing page & hero support out of the box</div>
+      <div class="verdict-item"><span style="color:var(--purple)">→</span> Faster build times, smaller output</div>
+      <div class="verdict-item"><span style="color:var(--purple)">→</span> Vercel deploys in one click</div>
+    </div>
+    <div class="verdict-col">
+      <h3 style="color:var(--blue)">◈ Why Docusaurus</h3>
+      <div class="verdict-item"><span style="color:var(--blue)">→</span> More familiar to developers from open-source docs</div>
+      <div class="verdict-item"><span style="color:var(--blue)">→</span> Built-in versioning (useful if guide evolves rapidly)</div>
+      <div class="verdict-item"><span style="color:var(--blue)">→</span> React-based — easier if the team knows React</div>
+      <div class="verdict-item"><span style="color:var(--blue)">→</span> Algolia search integration is mature</div>
+      <div class="verdict-item"><span style="color:var(--blue)">→</span> "Looks like docs" — professional, no-surprise layout</div>
+    </div>
+    <div class="verdict-col">
+      <h3 style="color:var(--green)">Verdict for this project</h3>
+      <div class="verdict-item"><span style="color:var(--green)">→</span> <strong style="color:var(--text)">Astro Starlight</strong> — the guide is visual-first and design matters to the audience</div>
+      <div class="verdict-item"><span style="color:var(--green)">→</span> Can replicate the dark card aesthetic from the HTML guide exactly</div>
+      <div class="verdict-item"><span style="color:var(--green)">→</span> Beginner audience will find a beautiful, modern site more inviting</div>
+      <div class="verdict-item"><span style="color:var(--green)">→</span> One command to scaffold: <code style="font-size:11px;background:rgba(74,222,128,.1);color:var(--green);padding:2px 5px;border-radius:3px">npm create astro@latest -- --template starlight</code></div>
+    </div>
+  </div>
+</div>
+
+</body>
+</html>
