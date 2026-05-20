@@ -17,13 +17,13 @@ export default defineConfig({
         {
           label: 'Guides',
           items: [
-            { label: 'VS Code + Claude CLI', autogenerate: { directory: 'guides/vscode-cli' } },
-            { label: 'Claude Desktop', autogenerate: { directory: 'guides/claude-desktop' } },
+            { label: 'VS Code + Claude CLI', items: [{ autogenerate: { directory: 'guides/vscode-cli' } }] },
+            { label: 'Claude Desktop', items: [{ autogenerate: { directory: 'guides/claude-desktop' } }] },
           ],
         },
-        { label: 'AI Landscape', autogenerate: { directory: 'ai-landscape' } },
-        { label: 'Cheatsheets', autogenerate: { directory: 'cheatsheets' } },
-        { label: 'Reference', autogenerate: { directory: 'reference' } },
+        { label: 'AI Landscape', items: [{ autogenerate: { directory: 'ai-landscape' } }] },
+        { label: 'Cheatsheets', items: [{ autogenerate: { directory: 'cheatsheets' } }] },
+        { label: 'Reference', items: [{ autogenerate: { directory: 'reference' } }] },
       ],
     }),
   ],
