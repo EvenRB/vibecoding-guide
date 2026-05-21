@@ -1,8 +1,16 @@
 // src/data/roadmap.ts
 
+// 'video' and 'course' badges are reserved for future content
 export type ResourceBadge = 'guide' | 'cheatsheet' | 'external' | 'video' | 'course'
 export type NodeType = 'core' | 'branch' | 'warning'
 export type Track = 'choose' | 'level-up' | 'ship-it'
+
+type CoreNodeId = 'foundations' | 'claude-projects' | 'claude-cli' | 'second-brain'
+type BranchNodeId =
+  | 'cursor' | 'aider' | 'windsurf'
+  | 'agents' | 'orchestrator' | 'token-control' | 'docs-arch'
+  | 'backend' | 'deployment' | 'team' | 'testing' | 'public'
+export type NodeId = CoreNodeId | BranchNodeId
 
 export interface Resource {
   label: string
@@ -69,7 +77,7 @@ export const BRANCH_NODES: Record<Track, { label: string; nodes: RoadmapNode[] }
   },
 }
 
-export const PANELS: Record<string, PanelData> = {
+export const PANELS: Record<NodeId, PanelData> = {
   foundations: {
     title: 'Foundations',
     description: 'Build the mental model for AI-assisted development. Learn how to prompt effectively, understand what Claude can and cannot do, and set up your first workflow.',
@@ -140,7 +148,7 @@ export const PANELS: Record<string, PanelData> = {
     resources: [
       { label: 'Cursor documentation', badge: 'external', href: 'https://cursor.sh/docs' },
     ],
-    courseHref: '/guides/vscode-cli/',
+    courseHref: '/guides/vscode-cli/', // placeholder — dedicated course page not yet created
   },
   aider: {
     title: 'Aider',
@@ -164,7 +172,7 @@ export const PANELS: Record<string, PanelData> = {
     resources: [
       { label: 'Aider documentation', badge: 'external', href: 'https://aider.chat/docs/' },
     ],
-    courseHref: '/guides/vscode-cli/',
+    courseHref: '/guides/vscode-cli/', // placeholder — dedicated course page not yet created
   },
   windsurf: {
     title: 'Windsurf / VS Code + Copilot',
@@ -175,7 +183,7 @@ export const PANELS: Record<string, PanelData> = {
       { label: 'VS Code AI shortcuts', badge: 'cheatsheet', href: '/cheatsheets/vscode-ai-shortcuts' },
       { label: 'Windsurf docs',        badge: 'external',   href: 'https://docs.codeium.com/windsurf/getting-started' },
     ],
-    courseHref: '/guides/vscode-cli/',
+    courseHref: '/guides/vscode-cli/', // placeholder — dedicated course page not yet created
   },
   agents: {
     title: 'Agents & Skills',
@@ -229,7 +237,7 @@ export const PANELS: Record<string, PanelData> = {
     resources: [
       { label: 'Supabase documentation', badge: 'external', href: 'https://supabase.com/docs' },
     ],
-    courseHref: '/guides/vscode-cli/',
+    courseHref: '/guides/vscode-cli/', // placeholder — dedicated course page not yet created
   },
   deployment: {
     title: 'Deployment & CI',
@@ -239,7 +247,7 @@ export const PANELS: Record<string, PanelData> = {
     resources: [
       { label: 'Vercel documentation', badge: 'external', href: 'https://vercel.com/docs' },
     ],
-    courseHref: '/guides/vscode-cli/',
+    courseHref: '/guides/vscode-cli/', // placeholder — dedicated course page not yet created
   },
   team: {
     title: 'Team Workflows',
@@ -249,7 +257,7 @@ export const PANELS: Record<string, PanelData> = {
     resources: [
       { label: 'CLAUDE.md reference', badge: 'guide', href: '/reference/claude-md' },
     ],
-    courseHref: '/reference/claude-md',
+    courseHref: '/reference/claude-md', // placeholder — dedicated course page not yet created
   },
   testing: {
     title: 'Testing with AI',
@@ -259,7 +267,7 @@ export const PANELS: Record<string, PanelData> = {
     resources: [
       { label: 'Claude CLI guide', badge: 'guide', href: '/guides/vscode-cli/' },
     ],
-    courseHref: '/guides/vscode-cli/',
+    courseHref: '/guides/vscode-cli/', // placeholder — dedicated course page not yet created
   },
   public: {
     title: 'Building in Public',
@@ -269,6 +277,6 @@ export const PANELS: Record<string, PanelData> = {
     resources: [
       { label: 'Markdown + MDX cheatsheet', badge: 'cheatsheet', href: '/cheatsheets/markdown-mdx' },
     ],
-    courseHref: '/guides/vscode-cli/',
+    courseHref: '/guides/vscode-cli/', // placeholder — dedicated course page not yet created
   },
 }
