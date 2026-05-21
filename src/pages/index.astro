@@ -1,0 +1,186 @@
+---
+// src/pages/index.astro
+import Roadmap from '../components/Roadmap.astro'
+import '../styles/custom.css'
+---
+
+<!doctype html>
+<html lang="en" data-theme="dark">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="description" content="Learn AI-assisted development step by step — from first setup to advanced multi-agent workflows." />
+    <title>Vibecoding Guide</title>
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+  </head>
+  <body>
+
+    <header class="site-header">
+      <nav class="site-nav">
+        <a href="/" class="site-logo">vibecoding.guide</a>
+        <div class="nav-links">
+          <a href="/" class="nav-link is-active">Roadmap</a>
+          <a href="/guides/vscode-cli/" class="nav-link">Guides</a>
+          <a href="/cheatsheets/" class="nav-link">Cheatsheets</a>
+          <a href="/reference/building-skills" class="nav-link">Reference</a>
+        </div>
+        <button class="theme-toggle" id="theme-toggle" aria-label="Toggle colour theme">☀</button>
+      </nav>
+    </header>
+
+    <main class="site-main">
+      <div class="hero">
+        <h1 class="hero-title">
+          Learn AI-assisted development<br />
+          <span class="hero-accent">step by step</span>
+        </h1>
+        <p class="hero-sub">
+          Click any node to explore the course.
+          Follow the core path or jump straight to what you need.
+        </p>
+      </div>
+      <Roadmap />
+    </main>
+
+  </body>
+</html>
+
+<style>
+  *,
+  *::before,
+  *::after {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+  }
+
+  body {
+    font-family: system-ui, -apple-system, sans-serif;
+    background: var(--sl-color-bg);
+    color: var(--sl-color-text);
+    min-height: 100vh;
+  }
+
+  /* ── Header ───────────────────────────── */
+  .site-header {
+    position: sticky;
+    top: 0;
+    z-index: 100;
+    background: var(--sl-color-bg-nav);
+    border-bottom: 1px solid var(--sl-color-hairline-light);
+  }
+
+  .site-nav {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 1.5rem;
+    height: 56px;
+    display: flex;
+    align-items: center;
+    gap: 1.5rem;
+  }
+
+  .site-logo {
+    font-size: 0.9rem;
+    font-weight: 800;
+    color: var(--sl-color-accent);
+    text-decoration: none;
+    letter-spacing: -0.01em;
+    flex-shrink: 0;
+  }
+
+  .nav-links {
+    display: flex;
+    gap: 0.25rem;
+    flex: 1;
+  }
+
+  .nav-link {
+    padding: 0.35rem 0.875rem;
+    border-radius: 6px;
+    font-size: 0.82rem;
+    font-weight: 500;
+    color: var(--sl-color-gray-2);
+    text-decoration: none;
+    transition: color 0.15s, background 0.15s;
+  }
+
+  .nav-link:hover {
+    color: var(--sl-color-text);
+    background: var(--sl-color-hairline-shade);
+  }
+
+  .nav-link.is-active {
+    color: var(--sl-color-text-accent);
+    background: var(--sl-color-accent-low);
+  }
+
+  .theme-toggle {
+    margin-left: auto;
+    background: none;
+    border: 1px solid var(--sl-color-hairline-light);
+    color: var(--sl-color-gray-2);
+    width: 34px;
+    height: 34px;
+    border-radius: 8px;
+    cursor: pointer;
+    font-size: 1rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: border-color 0.15s, color 0.15s;
+    flex-shrink: 0;
+  }
+
+  .theme-toggle:hover {
+    border-color: var(--sl-color-accent);
+    color: var(--sl-color-accent);
+  }
+
+  /* ── Hero ─────────────────────────────── */
+  .site-main {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 1.5rem;
+  }
+
+  .hero {
+    text-align: center;
+    padding: 3.5rem 1rem 2.5rem;
+  }
+
+  .hero-title {
+    font-size: clamp(1.75rem, 4vw, 2.75rem);
+    font-weight: 800;
+    line-height: 1.2;
+    letter-spacing: -0.02em;
+    color: var(--sl-color-text);
+    margin-bottom: 1rem;
+  }
+
+  .hero-accent {
+    background: linear-gradient(135deg, var(--sl-color-accent), #60a5fa);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+
+  .hero-sub {
+    font-size: 1rem;
+    color: var(--sl-color-gray-2);
+    max-width: 480px;
+    margin: 0 auto;
+    line-height: 1.6;
+  }
+</style>
+
+<script>
+  const toggle = document.getElementById('theme-toggle')
+  const html = document.documentElement
+
+  toggle?.addEventListener('click', () => {
+    const isLight = html.getAttribute('data-theme') === 'light'
+    html.setAttribute('data-theme', isLight ? 'dark' : 'light')
+    if (toggle) toggle.textContent = isLight ? '☀' : '🌙'
+  })
+</script>
