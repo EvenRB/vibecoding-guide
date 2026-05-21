@@ -257,14 +257,14 @@ const branchEntries = Object.entries(BRANCH_NODES) as [
   /* ── Side panel ────────────────────────────────── */
   .roadmap-panel {
     width: 0;
-    overflow: hidden;
+    overflow-x: hidden;
+    overflow-y: auto;
     transition: width 0.3s ease;
     background: var(--sl-color-bg-nav);
     border-left: 1px solid var(--sl-color-hairline-light);
     position: sticky;
     top: 0;
     max-height: 100vh;
-    overflow-y: auto;
   }
 
   .roadmap-panel.is-open {
