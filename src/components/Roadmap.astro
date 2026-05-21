@@ -1,0 +1,561 @@
+---
+// src/components/Roadmap.astro
+import { CORE_NODES, BRANCH_NODES, PANELS } from '../data/roadmap.ts'
+
+const branchEntries = Object.entries(BRANCH_NODES) as [
+  import('../data/roadmap.ts').Track,
+  { label: string; nodes: import('../data/roadmap.ts').RoadmapNode[] }
+][]
+---
+
+<div class="roadmap-wrap" id="roadmap-wrap">
+
+  <!-- Node flow -->
+  <div class="roadmap-flow" id="roadmap-flow">
+
+    <!-- Core path -->
+    <div class="core-path">
+      {CORE_NODES.map((node, i) => (
+        <div class="core-item">
+          <button
+            class={`rm-node is-${node.type}`}
+            data-node-id={node.id}
+            aria-label={`Open ${node.label} course details`}
+          >
+            <span class="node-label">{node.label}</span>
+            <span class="node-arrow">→</span>
+          </button>
+          {i < CORE_NODES.length - 1 && <div class="core-connector" aria-hidden="true"></div>}
+        </div>
+      ))}
+    </div>
+
+    <!-- Branch divider -->
+    <div class="branch-divider" aria-hidden="true">
+      <div class="branch-divider-line"></div>
+      <span class="branch-divider-label">Choose your path</span>
+      <div class="branch-divider-line"></div>
+    </div>
+
+    <!-- Branch columns -->
+    <div class="branches">
+      {branchEntries.map(([track, { label, nodes }]) => (
+        <div class="branch-track" data-track={track}>
+          <div class="branch-header">{label}</div>
+          {nodes.map(node => (
+            <button
+              class={`rm-node is-${node.type}`}
+              data-node-id={node.id}
+              aria-label={`Open ${node.label} course details`}
+            >
+              {node.type === 'warning' && (
+                <span class="warning-pip" title="Read 'Is this for you?' before starting" aria-label="Read before starting">!</span>
+              )}
+              <span class="node-label">{node.label}</span>
+              <span class="node-arrow">→</span>
+            </button>
+          ))}
+        </div>
+      ))}
+    </div>
+
+  </div>
+
+  <!-- Side panel (populated by JS) -->
+  <aside class="roadmap-panel" id="roadmap-panel" aria-label="Course details" aria-hidden="true">
+    <button class="panel-close" id="panel-close" aria-label="Close panel">✕</button>
+    <div id="panel-content" class="panel-content-inner"></div>
+  </aside>
+
+</div>
+
+<style is:global>
+  /* ── Layout ────────────────────────────────────── */
+  .roadmap-wrap {
+    display: flex;
+    gap: 0;
+    align-items: flex-start;
+    min-height: 60vh;
+    transition: gap 0.3s ease;
+  }
+
+  .roadmap-flow {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 2rem 1rem 4rem;
+    transition: flex 0.3s ease;
+  }
+
+  .roadmap-wrap.has-panel .roadmap-flow {
+    flex: 0 0 55%;
+  }
+
+  /* ── Core path ─────────────────────────────────── */
+  .core-path {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 100%;
+    max-width: 340px;
+  }
+
+  .core-item {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 100%;
+  }
+
+  .core-connector {
+    width: 2px;
+    height: 28px;
+    background: var(--sl-color-accent);
+    opacity: 0.4;
+  }
+
+  /* ── Nodes ─────────────────────────────────────── */
+  .rm-node {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    width: 100%;
+    padding: 0.875rem 1.25rem;
+    border-radius: 10px;
+    font-size: 0.9rem;
+    font-weight: 600;
+    font-family: inherit;
+    cursor: pointer;
+    transition: border-color 0.15s, background 0.15s, transform 0.1s;
+    text-align: left;
+  }
+
+  .rm-node.is-core {
+    background: rgba(124, 58, 237, 0.1);
+    border: 1.5px solid rgba(124, 58, 237, 0.45);
+    color: var(--sl-color-text-accent);
+  }
+
+  .rm-node.is-core:hover,
+  .rm-node.is-core.is-active {
+    background: rgba(124, 58, 237, 0.2);
+    border-color: var(--sl-color-accent);
+    transform: translateX(3px);
+  }
+
+  .rm-node.is-branch {
+    background: rgba(255, 255, 255, 0.03);
+    border: 1.5px solid var(--sl-color-hairline-light);
+    color: var(--sl-color-gray-1);
+  }
+
+  .rm-node.is-branch:hover,
+  .rm-node.is-branch.is-active {
+    background: rgba(124, 58, 237, 0.08);
+    border-color: rgba(124, 58, 237, 0.35);
+    color: var(--sl-color-text-accent);
+    transform: translateX(3px);
+  }
+
+  .rm-node.is-warning {
+    background: rgba(255, 255, 255, 0.03);
+    border: 1.5px solid rgba(251, 146, 60, 0.3);
+    color: var(--sl-color-gray-1);
+  }
+
+  .rm-node.is-warning:hover,
+  .rm-node.is-warning.is-active {
+    background: rgba(251, 146, 60, 0.08);
+    border-color: rgba(251, 146, 60, 0.5);
+    color: #fb923c;
+    transform: translateX(3px);
+  }
+
+  .node-label {
+    flex: 1;
+  }
+
+  .node-arrow {
+    opacity: 0;
+    font-size: 0.75rem;
+    transition: opacity 0.15s;
+  }
+
+  .rm-node:hover .node-arrow,
+  .rm-node.is-active .node-arrow {
+    opacity: 1;
+  }
+
+  .warning-pip {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 16px;
+    height: 16px;
+    border-radius: 50%;
+    background: rgba(251, 146, 60, 0.2);
+    border: 1px solid rgba(251, 146, 60, 0.4);
+    color: #fb923c;
+    font-size: 0.6rem;
+    font-weight: 800;
+    margin-right: 0.5rem;
+    flex-shrink: 0;
+  }
+
+  /* ── Branch divider ────────────────────────────── */
+  .branch-divider {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    width: 100%;
+    max-width: 800px;
+    margin: 2rem 0 1.5rem;
+  }
+
+  .branch-divider-line {
+    flex: 1;
+    height: 1px;
+    background: var(--sl-color-hairline-light);
+  }
+
+  .branch-divider-label {
+    font-size: 0.7rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    color: var(--sl-color-gray-3);
+    white-space: nowrap;
+  }
+
+  /* ── Branches ──────────────────────────────────── */
+  .branches {
+    display: flex;
+    gap: 1.5rem;
+    width: 100%;
+    max-width: 900px;
+    align-items: flex-start;
+  }
+
+  .branch-track {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+  }
+
+  .branch-header {
+    font-size: 0.65rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.09em;
+    color: var(--sl-color-gray-3);
+    padding: 0 0.25rem;
+    margin-bottom: 0.25rem;
+  }
+
+  /* ── Side panel ────────────────────────────────── */
+  .roadmap-panel {
+    width: 0;
+    overflow: hidden;
+    transition: width 0.3s ease;
+    background: var(--sl-color-bg-nav);
+    border-left: 1px solid var(--sl-color-hairline-light);
+    position: sticky;
+    top: 0;
+    max-height: 100vh;
+    overflow-y: auto;
+  }
+
+  .roadmap-panel.is-open {
+    width: 45%;
+    min-width: 320px;
+  }
+
+  .panel-close {
+    position: absolute;
+    top: 1rem;
+    right: 1rem;
+    background: none;
+    border: 1px solid var(--sl-color-hairline-light);
+    color: var(--sl-color-gray-2);
+    width: 28px;
+    height: 28px;
+    border-radius: 6px;
+    cursor: pointer;
+    font-size: 0.85rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: border-color 0.15s, color 0.15s;
+  }
+
+  .panel-close:hover {
+    border-color: var(--sl-color-accent);
+    color: var(--sl-color-accent);
+  }
+
+  .panel-content-inner {
+    padding: 1.5rem;
+  }
+
+  /* ── Panel inner content ───────────────────────── */
+  .panel-title {
+    font-size: 1.3rem;
+    font-weight: 800;
+    color: var(--sl-color-text);
+    margin: 0 0 0.5rem;
+    padding-right: 2rem;
+  }
+
+  .panel-desc {
+    font-size: 0.85rem;
+    color: var(--sl-color-gray-2);
+    line-height: 1.6;
+    margin: 0 0 1.5rem;
+  }
+
+  .panel-section {
+    margin-bottom: 1.25rem;
+  }
+
+  .panel-section-label {
+    font-size: 0.65rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    color: var(--sl-color-gray-3);
+    margin-bottom: 0.5rem;
+  }
+
+  /* Prerequisites */
+  .prereq-list {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.4rem;
+  }
+
+  .prereq-tag {
+    display: inline-block;
+    padding: 3px 10px;
+    background: rgba(124, 58, 237, 0.1);
+    border: 1px solid rgba(124, 58, 237, 0.25);
+    border-radius: 100px;
+    font-size: 0.75rem;
+    color: var(--sl-color-text-accent);
+    text-decoration: none;
+    transition: background 0.15s;
+  }
+
+  .prereq-tag:hover {
+    background: rgba(124, 58, 237, 0.2);
+  }
+
+  .prereq-none {
+    font-size: 0.8rem;
+    color: var(--sl-color-gray-3);
+    font-style: italic;
+  }
+
+  /* Is this for you */
+  .ify-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 0.75rem;
+  }
+
+  .ify-col {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 0.4rem;
+  }
+
+  .ify-yes,
+  .ify-no {
+    font-size: 0.78rem;
+    line-height: 1.4;
+    padding: 0.35rem 0.6rem;
+    border-radius: 6px;
+  }
+
+  .ify-yes {
+    background: rgba(74, 222, 128, 0.08);
+    border: 1px solid rgba(74, 222, 128, 0.2);
+    color: #4ade80;
+  }
+
+  .ify-no {
+    background: rgba(248, 113, 113, 0.08);
+    border: 1px solid rgba(248, 113, 113, 0.2);
+    color: #f87171;
+  }
+
+  /* Artifact */
+  .artifact-section .artifact-text {
+    font-size: 0.85rem;
+    color: var(--sl-color-text);
+    background: rgba(124, 58, 237, 0.06);
+    border: 1px solid rgba(124, 58, 237, 0.2);
+    border-radius: 8px;
+    padding: 0.75rem 1rem;
+    line-height: 1.5;
+  }
+
+  /* Resources */
+  .resource-list {
+    display: flex;
+    flex-direction: column;
+    gap: 0.4rem;
+  }
+
+  .resource-item {
+    display: flex;
+    align-items: center;
+    gap: 0.6rem;
+    font-size: 0.82rem;
+    text-decoration: none;
+    color: var(--sl-color-gray-1);
+    padding: 0.4rem 0.6rem;
+    border-radius: 6px;
+    transition: background 0.15s;
+  }
+
+  .resource-item:hover {
+    background: var(--sl-color-hairline-shade);
+  }
+
+  .res-badge {
+    display: inline-block;
+    font-size: 0.6rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    padding: 2px 6px;
+    border-radius: 4px;
+    flex-shrink: 0;
+  }
+
+  .res-badge-guide      { background: rgba(124, 58, 237, 0.15); color: #c4b5fd; }
+  .res-badge-cheatsheet { background: rgba(34, 211, 238, 0.12); color: #67e8f9; }
+  .res-badge-external   { background: rgba(96, 165, 250, 0.12); color: #93c5fd; }
+  .res-badge-video      { background: rgba(248, 113, 113, 0.12); color: #fca5a5; }
+  .res-badge-course     { background: rgba(74, 222, 128, 0.12); color: #86efac; }
+
+  /* CTA button */
+  .panel-cta {
+    display: block;
+    margin-top: 1.5rem;
+    padding: 0.75rem 1.25rem;
+    background: var(--sl-color-accent);
+    color: white;
+    border-radius: 8px;
+    font-size: 0.875rem;
+    font-weight: 700;
+    text-decoration: none;
+    text-align: center;
+    transition: opacity 0.15s;
+  }
+
+  .panel-cta:hover {
+    opacity: 0.88;
+  }
+
+  /* ── Responsive ────────────────────────────────── */
+  @media (max-width: 768px) {
+    .roadmap-wrap.has-panel .roadmap-flow {
+      display: none;
+    }
+
+    .roadmap-panel.is-open {
+      width: 100%;
+    }
+
+    .branches {
+      flex-direction: column;
+    }
+  }
+</style>
+
+<script define:vars={{ PANELS }}>
+  function badge(type, label) {
+    return `<span class="res-badge res-badge-${type}">${type}</span>${label}`
+  }
+
+  function buildPanelHTML(data) {
+    const prereqs = data.prerequisites.length > 0
+      ? data.prerequisites
+          .map(p => `<a href="${p.href}" class="prereq-tag">${p.label}</a>`)
+          .join('')
+      : '<span class="prereq-none">None — start here</span>'
+
+    const ifySection = data.isThisForYou
+      ? `<div class="panel-section">
+          <div class="panel-section-label">Is this for you?</div>
+          <div class="ify-grid">
+            <ul class="ify-col">${data.isThisForYou.yes.map(t => `<li class="ify-yes">✓ ${t}</li>`).join('')}</ul>
+            <ul class="ify-col">${data.isThisForYou.no.map(t => `<li class="ify-no">✗ ${t}</li>`).join('')}</ul>
+          </div>
+        </div>`
+      : ''
+
+    const resources = data.resources
+      .map(r => {
+        const rel = r.badge === 'external' ? 'rel="noopener noreferrer"' : ''
+        const target = r.badge === 'external' ? 'target="_blank"' : ''
+        return `<a href="${r.href}" class="resource-item" ${target} ${rel}>${badge(r.badge, r.label)}</a>`
+      })
+      .join('')
+
+    return `
+      <h2 class="panel-title">${data.title}</h2>
+      <p class="panel-desc">${data.description}</p>
+      <div class="panel-section">
+        <div class="panel-section-label">Prerequisites</div>
+        <div class="prereq-list">${prereqs}</div>
+      </div>
+      ${ifySection}
+      <div class="panel-section artifact-section">
+        <div class="panel-section-label">You'll walk away with</div>
+        <div class="artifact-text">${data.artifact}</div>
+      </div>
+      <div class="panel-section">
+        <div class="panel-section-label">Resources</div>
+        <div class="resource-list">${resources}</div>
+      </div>
+      <a href="${data.courseHref}" class="panel-cta">Start course →</a>
+    `
+  }
+
+  function openPanel(nodeId) {
+    const data = PANELS[nodeId]
+    if (!data) return
+
+    document.querySelectorAll('[data-node-id]').forEach(n => n.classList.remove('is-active'))
+    const active = document.querySelector(`[data-node-id="${nodeId}"]`)
+    if (active) active.classList.add('is-active')
+
+    document.getElementById('panel-content').innerHTML = buildPanelHTML(data)
+    document.getElementById('roadmap-panel').classList.add('is-open')
+    document.getElementById('roadmap-panel').removeAttribute('aria-hidden')
+    document.getElementById('roadmap-wrap').classList.add('has-panel')
+  }
+
+  function closePanel() {
+    document.getElementById('roadmap-panel').classList.remove('is-open')
+    document.getElementById('roadmap-panel').setAttribute('aria-hidden', 'true')
+    document.getElementById('roadmap-wrap').classList.remove('has-panel')
+    document.querySelectorAll('[data-node-id]').forEach(n => n.classList.remove('is-active'))
+  }
+
+  document.querySelectorAll('[data-node-id]').forEach(node => {
+    node.addEventListener('click', () => openPanel(node.dataset.nodeId))
+  })
+
+  document.getElementById('panel-close').addEventListener('click', closePanel)
+
+  // Open foundations on load
+  setTimeout(() => openPanel('foundations'), 400)
+</script>
